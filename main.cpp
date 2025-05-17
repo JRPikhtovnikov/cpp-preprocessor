@@ -14,7 +14,12 @@ path operator""_p(const char* data, std::size_t sz) {
     return {data, data + sz};
 }
 
-// напишите эту функцию
+void PrintIncludeError(const string& include_file, const path& file_path, size_t line_number) {
+    cout << "unknown include file " << include_file
+         << " at file " << file_path.string()
+         << " at line " << line_number + 1 << endl;
+}
+
 bool ProcessFile(const path& file_path, ostream& out, const vector<path>& include_directories, size_t& line_number) {
     ifstream input(file_path);
     if (!input.is_open()) {
@@ -42,9 +47,7 @@ bool ProcessFile(const path& file_path, ostream& out, const vector<path>& includ
                     }
                 }
                 if (!found) {
-                    cout << "unknown include file " << include_file
-                         << " at file " << file_path.string()
-                         << " at line " << line_number + 1 << endl;
+                    PrintIncludeError(include_file, file_path, line_number);
                     return false;
                 }
             }
@@ -67,9 +70,7 @@ bool ProcessFile(const path& file_path, ostream& out, const vector<path>& includ
                 }
             }
             if (!found) {
-                cout << "unknown include file " << include_file
-                     << " at file " << file_path.string()
-                     << " at line " << line_number + 1 << endl;
+                PrintIncludeError(include_file, file_path, line_number);
                 return false;
             }
 
